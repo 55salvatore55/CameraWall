@@ -1,69 +1,99 @@
 #Requires AutoHotkey v2.0
 #SingleInstance Force
-Persistent
 
-;===========================================================
+;==========================================================
 ; CameraWall
-; Versione : 0.1.0
-; Autore   : Salvatore + ChatGPT
-;===========================================================
+; Version 1.0.0
+;
+; Automatically opens, arranges and refreshes
+; Windows Explorer windows used for camera monitoring.
+;==========================================================
 
-global AppName := "CameraWall"
-global Version := "0.1.0"
+;---------------------------
+; Modules
+;---------------------------
 
-SetWorkingDir(A_ScriptDir)
-
+#Include Source\Utils.ahk
+#Include Source\Camera.ahk
 #Include Source\Config.ahk
 #Include Source\Explorer.ahk
 #Include Source\Layout.ahk
 #Include Source\Refresh.ahk
-#Include Source\Utils.ahk
+
+
+;---------------------------
+; Main program
+;---------------------------
 
 Main()
 
 return
 
+
 Main()
 {
-    try
+    Log("===================================")
+    Log("Starting CameraWall")
+    Log("===================================")
+
+    ;----------------------------------
+    ; Load Config.ini
+    ;----------------------------------
+
+    if !LoadConfiguration()
     {
-        Log("===================================")
-        Log(AppName " " Version)
-        Log("Avvio programma")
-
-        if !LoadConfiguration()
-        {
-            MsgBox "Errore durante il caricamento della configurazione."
-            ExitApp
-        }
-
-        CameraList := GetCameraList()
-
-        if CameraList.Length = 0
-        {
-            MsgBox "Nessuna telecamera configurata."
-            ExitApp
-        }
-
-        Log("Telecamere configurate: " CameraList.Length)
-
-        OpenExplorerWindows(CameraList)
-
-        ArrangeExplorerWindows()
-
-        StartRefreshTimer()
-
-        Log("CameraWall avviato correttamente.")
+        ErrorMessage("Configuration loading error.")
+        ExitApp
     }
-    catch Error as Err
+
+    ;----------------------------------
+    ; Load Layout.ini
+    ;----------------------------------
+
+    if !LoadLayout()
     {
-        MsgBox
-        (
-            "Errore:`n`n"
-            Err.Message
-            "`nRiga: " Err.Line
-        )
-
-        Log("ERRORE: " Err.Message)
+        ErrorMessage("Layout loading error.")
+        ExitApp
     }
+
+    ;----------------------------------
+    ; Open Explorer windows
+    ;----------------------------------
+
+    OpenExplorerWindows()
+
+    Sleep 4000
+
+    ;----------------------------------
+    ; Apply layout
+    ;----------------------------------
+
+    ApplyLayout()
+
+    Sleep 300
+
+    ApplyLayout()
+
+    Sleep 300
+
+    BringAllToFront()
+
+    ;----------------------------------
+    ; Start refresh system
+    ;----------------------------------
+
+    InitializeRefresh()
+
+    Log("CameraWall started successfully.")
+}
+
+
+;----------------------------------------------------------
+; Save current layout
+;----------------------------------------------------------
+
+F9::
+{
+    SaveLayout()
+    MsgBox("Layout saved.")
 }
