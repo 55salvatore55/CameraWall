@@ -8,7 +8,6 @@
 
 global Layout := Map()
 
-
 ;----------------------------------------------------------
 ; Load Layout.ini
 ;----------------------------------------------------------
@@ -22,18 +21,27 @@ LoadLayout()
     LayoutFile := A_ScriptDir "\Layout.ini"
 
     if !FileExist(LayoutFile)
-{
-    Log("Layout.ini not found. Default layout will be used.")
-    return true
-}
+    {
+        Log("Layout.ini not found. Default layout will be used.")
+        return true
+    }
+
     for Cam in Cameras
     {
         Section := "CAMERA" Cam.Id
 
+        ; Do not create a layout entry for a camera whose
+        ; section is not present in Layout.ini.
+        if !IniRead(LayoutFile, Section, "X", "")
+        {
+            Log("No saved layout for " Cam.Name)
+            continue
+        }
+
         Item := Map()
 
-        Item["X"] := IniRead(LayoutFile, Section, "X", 0) + 0
-        Item["Y"] := IniRead(LayoutFile, Section, "Y", 0) + 0
+        Item["X"] := IniRead(LayoutFile, Section, "X") + 0
+        Item["Y"] := IniRead(LayoutFile, Section, "Y") + 0
         Item["W"] := IniRead(LayoutFile, Section, "W", 800) + 0
         Item["H"] := IniRead(LayoutFile, Section, "H", 600) + 0
 
