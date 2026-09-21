@@ -1,7 +1,9 @@
 # Changelog
 
 All notable changes to CameraWall are documented in this file.
-
+## [1.0.2] - 2026-09-21
+- Improved Explorer image sorting.
+- Images are now automatically sorted by modification date, with the most recent image shown first.
 ## [1.0.0] - 2026-08-10
 
 ### Added

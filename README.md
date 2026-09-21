@@ -196,7 +196,7 @@ temporarily enabled in `Refresh.ahk`.
 
 Current release:
 
-**CameraWall 1.0.0**
+**CameraWall 1.0.2**
 
 This is the first stable release.
 

@@ -111,6 +111,10 @@ FindExplorerWindow(Folder)
 ;----------------------------------------------------------
 ; Set Explorer to "Extra large icons"
 ;----------------------------------------------------------
+;----------------------------------------------------------
+; Set Explorer to "Extra large icons" and sort by
+; Date Modified - newest first
+;----------------------------------------------------------
 SetLargeIcons(Hwnd)
 {
     try
@@ -125,7 +129,10 @@ SetLargeIcons(Hwnd)
             Window.Document.CurrentViewMode := 1
             Window.Document.IconSize := 256
 
-            Log("Large icons applied.")
+            ; Sort by Date Modified - descending
+            Window.Document.SortColumns := "prop:-System.DateModified;"
+
+            Log("Large icons and date sorting applied.")
 
             return true
         }
